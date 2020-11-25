@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { login, startGoogleLogin, startLoginEmailPass } from '../../actions/auth';
 import { useForm } from '../../hooks/useForm';
@@ -9,12 +9,20 @@ export const LoginScreen = () => {
     /* da acceso al dispatch de accciones */
     const dispatch = useDispatch();
 
+    /* Voy a usar el store para obtener las propiedades que necesito para el loginscreen 
+    const state = useSelector(state => state); me traeria todo el state pero como solo voy a usar la propiedad
+    loading, la desestructuro y me quedo solo con esa
+    
+    */
+    const { loading } = useSelector( state => state.ui);
+
+
     /* voy a manejar el fomrulario con mi proio hooks asi que inicalizo el hook, le paso el objeto que representa
     el formulario que vy a manejar y recibo las funciones
     */
    const [values, handleInputChange, reset] = useForm({
-    email: 'sara',
-    password: '1234'
+    email: 'sara@sarasa.com',
+    password: '123456'
     });
 
     /* AHora que tengo inicializado el hook, en la variable values tengo los campos con los que inicialice el formulario
@@ -30,7 +38,7 @@ export const LoginScreen = () => {
     evento.preventDefault();
     
     /* ahora hago el dispatch de login que es una accion */
-    dispatch(startLoginEmailPass('1636363', 'Srasita'));
+    dispatch(startLoginEmailPass(email, password));
 
    }
 
@@ -63,7 +71,7 @@ const handleGoogleLogin = ()=>{
                     onChange={handleInputChange}
                     />
 
-                <button type="submit" className='btn btn-primary btn-block'>Login</button>
+                <button type="submit" className='btn btn-primary btn-block' disabled= {loading}>Login</button>
                 <hr />
                 <div className='auth__social-networks'>
                     <p>Ingresar con redes sociales</p>

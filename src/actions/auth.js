@@ -2,19 +2,33 @@ import { firebaseConfig, firebase, googleAuthProvider } from "../firebase/fireba
 /* las acciones son como los helpers */
 
 import { types } from "../types/types"
+import { finishLoading, startLoading } from "./ui";
 
 
 /* voy a crear una funcion asincrona a ver si anda */
 export const startLoginEmailPass = (email, password)=>{
 
+    console.log('me llega de mail', email);
+
     return (dispatch)=>{
 
-        setTimeout(() => {
+        /* Hago del dispatch de la accion SDtartLoading que va a poner el state del UI con lading en true */
+        dispatch(startLoading());
 
-            dispatch(login(123, 'sanata'));
-            console.log('login sanata');
+       firebase.auth().signInWithEmailAndPassword(email, password)
+       .then( ({user})=> {
+
+        console.log(user);
             
-        }, 3500);
+        dispatch(login(user.uid, user.displayName));
+        /* Ahora que tengo el usuario hago el finish loading */
+        dispatch(finishLoading());
+
+       }).catch(e => {
+           console.log('me dio un error', e);
+           dispatch(finishLoading);
+       });
+
     }
 
 }
@@ -74,3 +88,21 @@ export const login = (uid, displayName)=>{
         
     }
 }
+
+/* Logout, tiene que ser asincrono por que la parte de firebase tengo que dispararla y regresa una promesa*/
+export const startLogout = ()=>{
+
+    return async (dispatch) =>{
+       await  firebase.auth().signOut();
+
+        /* Una vez que se hace el dispatch de firebase ya tengo todo limpio y hago el dispatch del logout*/
+        dispatch(logout());
+    }
+
+}
+
+/* volvi a usar el return en la misa linea */
+export const logout = ()=> ({
+
+    type: types.logout
+});
