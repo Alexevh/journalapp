@@ -1,6 +1,7 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import { authReducer } from '../reducers/authreducer';
 import thunk from 'redux-thunk';
+import { uiReducer } from '../reducers/uiReducer';
 
 
 /* extraido de la msma pagina de redux */
@@ -11,7 +12,8 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 /* a un store no le puedo mandar mas de un reducer pero como voy a usar muchos necesito combinarlos en una sola
 variable, para eso uso esta funcion */
 const reducers = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    ui: uiReducer
 });
 
 /*  el segundo argumento lo obtuve de la doc que es https://github.com/zalmoxisus/redux-devtools-extension#usage 

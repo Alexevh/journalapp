@@ -2,6 +2,9 @@ import React from 'react'
 import {Link} from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import validator from 'validator';
+import { useDispatch, useSelector } from 'react-redux';
+import { setError, removeError } from '../../actions/ui';
+import { startRegistrerWithEmailPassword } from '../../actions/auth';
 
 
 /* 
@@ -18,6 +21,10 @@ import validator from 'validator';
 
 export const RegisterScreen = () => {
 
+/* vpy a usar esto para despachar los eventos */
+const dispatch = useDispatch();
+
+
 /* inicializo los campos que vy a controlar con mi custom hook */
 const [values, handleInputChange] = useForm({
     name: 'Sara',
@@ -26,6 +33,16 @@ const [values, handleInputChange] = useForm({
     password2: '1234'
 
 });
+/* este es un hook y recibe un callback, recibe un state y regresa un state
+ Como es un objeto lo voy a desestructurar pero podria usarlo asi tambien
+const state = useSelector(state => state.ui);
+*/
+const {msgError} = useSelector(state => state.ui);
+console.log(msgError);
+
+
+
+
 
 /* Como tengo el objeto inicial del formulario destestructuro las variables para trabajarlas de a una */
 const {name, email,password, password2 } = values;
@@ -37,8 +54,7 @@ const handleRegister = (e)=> {
     e.preventDefault();
     console.log('voy a controlar')
     if (isFormValid()){
-        console.log('Formulario correcto')
-        console.log('el nombre es', name)
+         dispatch(startRegistrerWithEmailPassword(email, password, name));
     }
 
     console.log(name, email,password, password2 );
@@ -51,13 +67,14 @@ const isFormValid = ()=>{
 
     /* arrancamos a verificar */
     if (name.trim().length <=1){
-        console.log('NOmbre menor a 2 caraceteres');
+        dispatch( setError('NOmbre menor a 2 caraceteres'));
+       
         return false;
     } else if (!validator.isEmail(email)){
-        console.log('Mail no valido');
+        dispatch( setError('Mail no valido'));
         return false;
     } else if(password !== password2){
-        console.log('No coicniden los passwords');
+        dispatch( setError('No coicndien los pass'));
         return false;
     }
 
@@ -70,9 +87,19 @@ const isFormValid = ()=>{
         <h3 className='auth__title'>Registro</h3>
         <form onSubmit={handleRegister}> 
 
-        <div className="auth__alert-error">
-            Verifique los errores
-        </div>
+
+         {
+             /* Voy a mostrar los errores, uso la forma corta de saber si msgError no es null y muestro el error */
+            msgError &&
+
+            (
+                <div className="auth__alert-error">
+                     {msgError}
+                 </div>
+            )
+
+         }
+       
 
         <input
                 type='text'
