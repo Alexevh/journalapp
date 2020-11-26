@@ -10,6 +10,10 @@ import { AuthRouter } from './AuthRouter';
 import  {firebase } from '../firebase/firebase-config';
 import { useDispatch } from 'react-redux';
 import { login } from '../actions/auth';
+import { PrivateRoute } from './PrivateRoute';
+import { PublicRoute } from './PublicRoute';
+
+
 
   /* Rutas principales */
 export const AppRouter = () => {
@@ -55,13 +59,15 @@ export const AppRouter = () => {
         return (<h1>Espere.....</h1>)
     }
 
+    /* privateroute solo va  a permitir la navegacion si el flag de esta logeado es true */
     return (
         <Router>
             <div>
                 <Switch>
                    
-                    <Route path="/auth" component={AuthRouter} />
-                    <Route exact path="/" component={JournalScreen} />
+                    <PublicRoute path="/auth" component={AuthRouter} isAuthenticated={isLoggedin}/>
+                     
+                    <PrivateRoute exact path="/" component={JournalScreen}  isAuthenticated={isLoggedin}/>
                     <Redirect to="/login" />
                 </Switch>
             </div>

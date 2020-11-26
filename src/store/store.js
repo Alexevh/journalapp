@@ -2,6 +2,7 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import { authReducer } from '../reducers/authreducer';
 import thunk from 'redux-thunk';
 import { uiReducer } from '../reducers/uiReducer';
+import { notesReducer } from '../reducers/notesReducer';
 
 
 /* extraido de la msma pagina de redux */
@@ -13,7 +14,8 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 variable, para eso uso esta funcion */
 const reducers = combineReducers({
     auth: authReducer,
-    ui: uiReducer
+    ui: uiReducer,
+    notes: notesReducer
 });
 
 /*  el segundo argumento lo obtuve de la doc que es https://github.com/zalmoxisus/redux-devtools-extension#usage 

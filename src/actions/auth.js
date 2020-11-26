@@ -4,6 +4,8 @@ import { firebaseConfig, firebase, googleAuthProvider } from "../firebase/fireba
 import { types } from "../types/types"
 import { finishLoading, startLoading } from "./ui";
 
+/** Sweet alert */
+import Swal from 'sweetalert2';
 
 /* voy a crear una funcion asincrona a ver si anda */
 export const startLoginEmailPass = (email, password)=>{
@@ -25,8 +27,9 @@ export const startLoginEmailPass = (email, password)=>{
         dispatch(finishLoading());
 
        }).catch(e => {
-           console.log('me dio un error', e);
+           
            dispatch(finishLoading);
+           Swal.fire('Error', 'El usuario o contraseña son incorectos', 'error')
        });
 
     }
@@ -49,6 +52,8 @@ export const startRegistrerWithEmailPassword = (email, password, name) => {
                 displayName: name
             });
             console.log(user);
+        }).catch((e) => {
+            Swal.fire('Error', e.message, 'error')
         });
     }
 };

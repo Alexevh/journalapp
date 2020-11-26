@@ -10,7 +10,7 @@ export const authReducer = (state = initialState, action)=>{
     switch(action.type){
 
         case  types.login:
-
+        /* cuando se llama al login, el state del reducer completa los campos uid y name, podria meter otros datos si quiero */
         return {
             uid: action.payload.uid,
             name: action.payload.displayName
